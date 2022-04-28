@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController()
 @RequestMapping("/parcial")
@@ -14,7 +15,6 @@ public class CompuestosController {
     @Autowired
     CompuestoRepository compuestoRepository;
 
-    //Load List of Books
     @PostMapping("/compuestos")
     public String createEmployeeList(@RequestBody List<Compuesto> compuestos) {
         compuestoRepository.saveAll(compuestos);
@@ -23,7 +23,6 @@ public class CompuestosController {
 
     @GetMapping("/compuestos")
     public List<Compuesto> getAllBooks() {
-        // The BookRepository is already injected and you can use it
         return compuestoRepository.findAll();
     }
 
@@ -44,6 +43,18 @@ public class CompuestosController {
         return compuestos;
     }
 
+    @GetMapping("/servicio2/{phrase}/{tui}")
+    public List<Compuesto> getComponentFilterAndGreaterThanTuiValor(@PathVariable String phrase, @PathVariable int tui) {
+        List<Compuesto> compuestos =  compuestoRepository.findCompuestosByNameContains(phrase).get();
+        return compuestos.stream().filter(compuesto -> compuesto.getTui() > tui).collect(Collectors.toList());
+    }
+
+    @GetMapping("/servicio3/{start}/{end}")
+    public List<Compuesto> getCompuestoThatStartWithAndEndWith(@PathVariable String start, @PathVariable String end) {
+        List<Compuesto> compuestos = compuestoRepository.findCompuestosByNameStartsWith(start).get();
+
+        return compuestos;
+    }
 
 
 }
