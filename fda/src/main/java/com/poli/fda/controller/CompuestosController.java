@@ -33,4 +33,17 @@ public class CompuestosController {
         return compuesto;
     }
 
+    @GetMapping("/servicio1/{min}/{max}")
+    public List<Compuesto> getCompuestoByRDARange(@PathVariable int min, @PathVariable int max) {
+        List<Compuesto> compuestos;
+        if(min>max){
+             compuestos = compuestoRepository.findCompuestosByRdaIsBetween(max,min).get();
+        }else{
+             compuestos =  compuestoRepository.findCompuestosByRdaIsBetween(min,max).get();
+        }
+        return compuestos;
+    }
+
+
+
 }
